@@ -35,8 +35,6 @@ from environment import EpistasisEnv
 EPISODE_LENGTH = 1
 NUM_SNPS = 3
 SAMPLE_SIZE = 600
-FILENAME = "/home/tskhakharova/epistasis-rl/epigen/sim/100502_1_ASW.json"
-LOG_FILE = 'result-dqn.txt'
 
 class OutputHandler(BaseOutputHandler):
 

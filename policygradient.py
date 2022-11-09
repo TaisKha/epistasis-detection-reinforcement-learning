@@ -30,8 +30,6 @@ ENTROPY_BETA = 0.01
 MAX_STEPS = 5000
 NUMBER_OF_EXPERIMENTS = 50
 
-LOG_FILE = "result-PG.txt"
-
     
 class FixedEpistasisEnv(gym.Env):
 

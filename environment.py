@@ -1,6 +1,9 @@
 import gym
 
+#имя файла с данными
 FILENAME = "/home/tskhakharova/epistasis-rl/epigen/sim/100502_1_ASW.json"
+#имя файла для output
+LOG_FILE = "logs"
 
 class EpistasisEnv(gym.Env):
 
