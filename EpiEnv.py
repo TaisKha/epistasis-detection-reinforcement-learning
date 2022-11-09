@@ -8,7 +8,7 @@ LOG_FILE = "logs"
 SAMPLE_SIZE = 600
 
     
-class FixedEpistasisEnv(gym.Env):
+class EpiEnv(gym.Env):
 
     def __init__(self):
         self.SAMPLE_SIZE = SAMPLE_SIZE #t1 = t2 = SAMPLE_SIZE
