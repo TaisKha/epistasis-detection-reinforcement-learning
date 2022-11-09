@@ -34,7 +34,7 @@ from environment import EpistasisEnv
 
 EPISODE_LENGTH = 1
 NUM_SNPS = 3
-SAMPLE_SIZE = 600
+
 
 class OutputHandler(BaseOutputHandler):
 

@@ -4,11 +4,13 @@ import gym
 FILENAME = "/home/tskhakharova/epistasis-rl/epigen/sim/100502_1_ASW.json"
 #имя файла для output
 LOG_FILE = "logs"
+#кол-во индивидуумов case = кол-во индивидуумов control = SAMPLE_SIZE
+SAMPLE_SIZE = 600
 
 class EpistasisEnv(gym.Env):
 
     def __init__(self):
-        self.SAMPLE_SIZE = SAMPLE_SIZE #t1 = t2 = SAMPLE_SIZE
+        self.SAMPLE_SIZE = SAMPLE_SIZE
         self.reset()
         self.action_space = spaces.Box(low=0, high=1, shape=(self.N_SNPS,), dtype=np.uint8)
         self.observation_space = spaces.Box(low=0, high=1, shape=
