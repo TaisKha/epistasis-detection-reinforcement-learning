@@ -1,23 +1,47 @@
 import gym
+import json
+from gym import spaces
 
 #имя файла с данными
 FILENAME = "/home/tskhakharova/epistasis-rl/epigen/sim/100502_1_ASW.json"
 #имя файла для output
-LOG_FILE = "logs"
+LOG_FILE = "logs_A2C_3SNP"
 #кол-во индивидуумов case = кол-во индивидуумов control = SAMPLE_SIZE
 SAMPLE_SIZE = 600
-
+#кол-во disease snps
+NUM_SNPS = 3
+#кол-во шагов в одном эпизоде
+EPISODE_LENGTH = 1
+#кол-во экспериментов
+NUM_OF_EXPERIMENTS = 50
+#maximum iterations of agent
+MAX_ITER = 10000
     
 class EpiEnv(gym.Env):
 
     def __init__(self):
-        self.SAMPLE_SIZE = SAMPLE_SIZE #t1 = t2 = SAMPLE_SIZE
+        self.filename = FILENAME
+        self.SAMPLE_SIZE = SAMPLE_SIZE
+        self.one_hot_obs = None
         self.reset()
         self.action_space = spaces.Box(low=0, high=1, shape=(self.N_SNPS,), dtype=np.uint8)
         self.observation_space = spaces.Box(low=0, high=1, shape=
                         (3, 2*self.SAMPLE_SIZE, self.N_SNPS), dtype=np.uint8)
         self.engine = None
         self.filename = FILENAME
+        
+    def establish_phen_gen(self, file):
+        with open(file) as f:
+            data = json.load(f)
+            genotype = np.array(data["genotype"])
+            self.phenotype = np.array(data["phenotype"])
+            self.genotype = genotype.T
+            num_phenotypes = max(self.phenotype)+1
+            self.disease_snps = data["disease_snps"]
+            self.phen_gen = [[] for _ in range(num_phenotypes)]
+            for i in range(len(self.genotype)):
+                self.phen_gen[self.phenotype[i]].append(i)
+            return  self.genotype.shape[0], self.genotype.shape[1]
         
         
     def normalize_reward(self, current_reward):
@@ -45,7 +69,7 @@ class EpiEnv(gym.Env):
     def _count_reward(self, snp_ids, check_on_true_answer=True):
         
         if set(snp_ids) == set(self.disease_snps) and check_on_true_answer:
-            f = open('LOG_FILE', 'a')
+            f = open(LOG_FILE, 'a')
             f.write("Disease snps are found ")
             f.write(str(snp_ids))
             f.write("\n")
@@ -90,10 +114,10 @@ class EpiEnv(gym.Env):
         
         self.N_IDV, self.N_SNPS = self.establish_phen_gen(self.filename)
         self.obs_phenotypes = None
-        one_hot_obs = self._next_observation()
+        self.one_hot_obs = self._next_observation()
         self.current_step = 0
         
-        return one_hot_obs
+        return self.one_hot_obs
         
 
     def render(self, mode='human', close=False):
@@ -119,7 +143,3 @@ class EpiEnv(gym.Env):
         one_hot_obs = one_hot_obs.movedim(2, 0)
 
         return one_hot_obs
-        
-        
-            
-        
